@@ -32,3 +32,9 @@ const analytics = Analytics({
   ],
 });
 ```
+
+## Registering a conversion plugin
+
+```typescript
+analytics.plugins.linkedin.conversion(conversionId);
+```
