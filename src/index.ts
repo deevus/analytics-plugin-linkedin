@@ -1,4 +1,4 @@
-import { AnalyticsPlugin } from "analytics";
+import { AnalyticsInstance, AnalyticsPlugin } from "analytics";
 import { isScriptLoaded } from "analytics-utils";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -7,6 +7,9 @@ type Metadata = Record<string, any>;
 interface LinkedInStatic {
   (a: string, b: string): void;
   q: [];
+
+  (method: string, options: Record<string, any>): void;
+  (method: "track", options: { conversion_id: string }): void;
 }
 
 declare global {
@@ -29,6 +32,10 @@ interface Params {
 }
 
 const scriptSrc = "https://snap.licdn.com/li.lms-analytics/insight.min.js";
+
+export interface LinkedInPluginBrowserInstance {
+  conversion(conversion_id: string): void;
+}
 
 const linkedinPlugin = (config: LinkedInPluginConfig): AnalyticsPlugin => {
   const sharedConfig = {
@@ -61,6 +68,12 @@ const linkedinPlugin = (config: LinkedInPluginConfig): AnalyticsPlugin => {
       loaded() {
         return isScriptLoaded(scriptSrc);
       },
+
+      methods: {
+        conversion(this: { instance: AnalyticsInstance }, conversion_id) {
+          window.lintrk?.("track", { conversion_id });
+        },
+      } as LinkedInPluginBrowserInstance,
     };
   } else {
     // TODO: Node API
