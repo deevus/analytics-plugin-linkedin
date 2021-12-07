@@ -1,6 +1,6 @@
 {
   "name": "analytics-plugin-linkedin",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "LinkedIn plugin for Analytics",
   "main": "dist/lib.node.js",
   "browser": "dist/lib.browser.js",
